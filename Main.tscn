@@ -1,29 +1,36 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://Main.gd" type="Script" id=1]
 [ext_resource path="res://Coin.tscn" type="PackedScene" id=2]
-[ext_resource path="res://assets/grass.png" type="Texture" id=3]
-[ext_resource path="res://CoinContainer.gd" type="Script" id=4]
-[ext_resource path="res://Player.tscn" type="PackedScene" id=5]
+[ext_resource path="res://HUD.tscn" type="PackedScene" id=3]
+[ext_resource path="res://assets/grass.png" type="Texture" id=4]
+[ext_resource path="res://CoinContainer.gd" type="Script" id=5]
+[ext_resource path="res://Player.tscn" type="PackedScene" id=6]
 
 [node name="Main" type="Node"]
 script = ExtResource( 1 )
 Coin = ExtResource( 2 )
 playtime = 30
 
+[node name="HUD" parent="." instance=ExtResource( 3 )]
+
 [node name="Background" type="TextureRect" parent="."]
 anchor_right = 1.0
 anchor_bottom = 1.0
-texture = ExtResource( 3 )
+texture = ExtResource( 4 )
 stretch_mode = 2
 
 [node name="CoinContainer" type="Node" parent="."]
-script = ExtResource( 4 )
+script = ExtResource( 5 )
 
 [node name="PlayerStart" type="Position2D" parent="."]
 position = Vector2( 240, 352 )
 
-[node name="Player" parent="." instance=ExtResource( 5 )]
+[node name="Player" parent="." instance=ExtResource( 6 )]
 scale = Vector2( 3, 3 )
 
 [node name="GameTimer" type="Timer" parent="."]
+[connection signal="start_game" from="HUD" to="." method="new_game"]
+[connection signal="hurt" from="Player" to="." method="_on_Player_hurt"]
+[connection signal="pickup" from="Player" to="." method="_on_Player_pickup"]
+[connection signal="timeout" from="GameTimer" to="." method="_on_GameTimer_timeout"]
